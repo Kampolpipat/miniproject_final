@@ -1,0 +1,14 @@
+import mongoose from "mongoose";
+
+const postSchema = mongoose.Schema({
+    userId: {type: String,required: true}
+    ,desc: String
+    ,img: String
+    ,likes: []
+},
+    {timestamps: true} // เพิ่ม timestamps เพื่อเก็บข้อมูลเวลาที่สร้างและอัปเดตโพสต์
+);
+
+var PostModel = mongoose.model("Post", postSchema);
+
+export default PostModel; // Export the model เพื่อให้สามารถนำไปใช้ในส่วนอื่นของโปรแกรมได้
