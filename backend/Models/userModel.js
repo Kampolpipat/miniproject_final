@@ -4,7 +4,16 @@ const userSchema = mongoose.Schema(
     {
         username: {
             type: String,
-            required: true
+            required: true,
+            unique: true,
+            trim: true,
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+            lowercase: true,
+            trim: true,
         },
         password: {
             type: String,
@@ -29,7 +38,9 @@ const userSchema = mongoose.Schema(
         worksAt:String,
         relationship:String,
         followers: [],
-        following: []
+        following: [],
+        resetPasswordToken: String,
+        resetPasswordExpires: Date
     },
     { timestamps: true }
 );

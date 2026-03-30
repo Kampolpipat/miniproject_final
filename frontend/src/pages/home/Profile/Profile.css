@@ -1,12 +1,19 @@
 .Profile{
     position: relative;
     display:grid;
-    grid-template-columns: 18rem auto 20rem;
+    grid-template-columns: 18rem 1fr 22rem;
     gap: 1rem;
+    padding: 1rem;
+    background: var(--bg);
 }
 
 .Profile-center{
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+@media (max-width: 1100px) {
+    .Profile { grid-template-columns: 1fr; }
+    .Profile-center { order: 3; }
 }

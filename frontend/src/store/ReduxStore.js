@@ -3,7 +3,7 @@ import {
     applyMiddleware,
     compose,
 } from "redux";
-import { thunk } from 'redux-thunk'; // แบบใหม่ที่มีปีกกา
+import thunk from 'redux-thunk';
 import { reducers } from "../reducers";
 
 function saveToLocalStorage(store) {

@@ -90,6 +90,28 @@ export const likePost = async (req, res) => {
 };
 
 
+// comment a post
+export const commentPost = async (req, res) => {
+    const postId = req.params.id;
+    const { userId, text } = req.body;
+
+    if (!text || !userId) {
+        return res.status(400).json({ message: 'Comment text and userId are required.' });
+    }
+
+    try {
+        const post = await PostModel.findById(postId);
+        if (!post) return res.status(404).json({ message: 'Post not found.' });
+
+        post.comments.push({ userId, text });
+        await post.save();
+
+        res.status(200).json({ message: 'Comment added.', comments: post.comments });
+    } catch (error) {
+        res.status(500).json(error);
+    }
+};
+
 // get timeline posts 
 export const getTimelinePosts = async (req, res) => {
         const userId = req.params.id; // ดึง ID ของผู้ใช้จากพารามิเตอร์ของ URL
@@ -113,14 +135,14 @@ export const getTimelinePosts = async (req, res) => {
                 }
             }
             ]);  
-        
+
             res.status(200)
             .json(currentUserPosts.concat(...followingPosts[0].followingPosts)
             .sort((a, b) => {
-                return b.createdAt - a.createdAt; // เรียงโพสต์ตามวันที่สร้างจากใหม่ไปเก่า
+                return new Date(b.createdAt) - new Date(a.createdAt); // เรียงโพสต์ตามวันที่สร้างจากใหม่ไปเก่า
             })
             ); 
-        
+
             } catch (error) 
         {
             res.status(500).json(error);

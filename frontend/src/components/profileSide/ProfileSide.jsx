@@ -6,12 +6,12 @@ import FollowerCard from '../FollowersCard/FollowerCard'
 
 import "./ProfileSide.css"
 
-const ProfileSide = () => {
+const ProfileSide = ({ onSelectFollower }) => {
   return (
     <div className='ProfileSide'>
       <Logosearch />
       <ProfileCard />
-      <FollowerCard />
+      <FollowerCard onSelectUser={onSelectFollower} />
     </div>
   )
 }

@@ -7,18 +7,19 @@ export const logIn = (formData) => async (dispatch) => {
         dispatch({ type: "AUTH_SUCCESS", data: data })
     } catch (error) {
         console.log(error)
-        dispatch({ type: "AUTH_FAIL" })
+        const message = error?.response?.data?.message || error?.message || 'Authentication failed. กรุณาลองใหม่อีกครั้ง'
+        dispatch({ type: "AUTH_FAIL", data: message })
     }
 }
 
 export const signUp = (formData) => async (dispatch) => {
     dispatch({ type: "AUTH_START" })
     try {
-        // แก้จาก AuthApi.logIn เป็น AuthApi.signUp
-        const { data } = await AuthApi.signUp(formData) 
+        const { data } = await AuthApi.signUp(formData)
         dispatch({ type: "AUTH_SUCCESS", data: data })
     } catch (error) {
         console.log(error)
-        dispatch({ type: "AUTH_FAIL" })
+        const message = error?.response?.data?.message || error?.message || 'Authentication failed. กรุณาลองใหม่อีกครั้ง'
+        dispatch({ type: "AUTH_FAIL", data: message })
     }
 }

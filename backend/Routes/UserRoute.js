@@ -1,14 +1,16 @@
 import express from "express";
-import { deleteUser,followUser, getUser,UnfollowUser,updateUser,} from "../Controllers/UserController.js";
-
-
+import { verifyToken } from "../middleware/verifyToken.js";
+import { deleteUser, followUser, getUser, UnfollowUser, updateUser, changePassword, getFollowers, getFollowing } from "../Controllers/UserController.js";
 
 const router = express.Router(); // Register Route
 
-router.get('/:id', getUser); // เส้นทางสำหรับดึงข้อมูลผู้ใช้ตาม ID
-router.put('/:id', updateUser); // เส้นทางสำหรับอัปเดตข้อมูลผู้ใช้ตาม ID
-router.delete('/:id', deleteUser); // เส้นทางสำหรับลบผู้ใช้ตาม ID 
-router.put('/:id/follow', followUser); // เส้นทางสำหรับติดตามผู้ใช้ตาม ID 
-router.put('/:id/unfollow', UnfollowUser); // เส้นทางสำหรับเลิกติดตามผู้ใช้ตาม ID (ยังไม่เสร็จสมบูรณ์)
+router.get('/:id', verifyToken, getUser); // get user info
+router.get('/:id/followers', verifyToken, getFollowers); // get follower list
+router.get('/:id/following', verifyToken, getFollowing);
+router.put('/:id', verifyToken, updateUser); // update profile
+router.put('/:id/change-password', verifyToken, changePassword);
+router.delete('/:id', verifyToken, deleteUser); // delete user
+router.put('/:id/follow', verifyToken, followUser); // follow user
+router.put('/:id/unfollow', verifyToken, UnfollowUser); // unfollow
 
 export default router; // Export the router

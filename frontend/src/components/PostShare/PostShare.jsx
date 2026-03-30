@@ -6,11 +6,17 @@ import { UilPlayCircle } from '@iconscout/react-unicons'
 import { UilLocationPoint } from '@iconscout/react-unicons'
 import { UilSchedule } from '@iconscout/react-unicons'
 import { UilTimes } from '@iconscout/react-unicons'
+import { createPost } from '../../api/PostRequest'
+import { useSelector } from 'react-redux'
 
 
 const PostShare = () => {
   const [image, setImage] = useState(null);
+  const [desc, setDesc] = useState('');
+  const [loading, setLoading] = useState(false);
   const imageRef = useRef();
+  const { authData } = useSelector((state) => state.authReducer);
+  const userId = authData?.user?._id || authData?.user?.id || authData?.id;
 
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
@@ -21,11 +27,38 @@ const PostShare = () => {
     }
   }
 
+  const handleShare = async () => {
+    if (!userId) return;
+    if (!desc.trim() && !image) return;
+    setLoading(true);
+
+    try {
+      const postBody = {
+        userId,
+        desc: desc.trim(),
+        img: image?.image || ''
+      };
+      await createPost(postBody);
+      setDesc('');
+      setImage(null);
+      window.dispatchEvent(new Event('timelineUpdated'));
+    } catch (err) {
+      console.error(err);
+    }
+
+    setLoading(false);
+  };
+
   return (
     <div className="PostShare">
       <img src={ProfileSC} alt="Profile" />
       <div>
-        <input type="text" placeholder="What's happening" />
+        <input
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
+          type="text"
+          placeholder="What's happening"
+        />
         <div className="postOptions">
           <div className="option"
             style={{ color: "var(--photo)" }}
@@ -49,8 +82,8 @@ const PostShare = () => {
             <UilSchedule />
             Schedule
           </div>
-          <button className="button ps-button">
-            Share
+          <button className="button ps-button" onClick={handleShare} disabled={loading}>
+            {loading ? 'Sharing...' : 'Share'}
           </button>
           <div style={{ display: "none" }}>
             <input type="file"
